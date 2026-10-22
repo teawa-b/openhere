@@ -65,6 +65,24 @@ img { display: block; }
 .example img { width: 76px; height: 57px; border-radius: 9px; object-fit: cover; background: var(--raised); }
 .example b { display: block; font-weight: 600; font-size: 15px; line-height: 1.25; }
 .example span { font-size: 13px; color: var(--muted); }
+/* How it works, docked beside the intro on arrival. The redesign wipes slowly across the empty room. */
+.how { position: fixed; z-index: 7; right: 16px; bottom: 36px; width: min(640px, calc(100vw - 484px)); display: grid; grid-template-columns: 250px 1fr; gap: 22px; padding: 18px; border-radius: var(--r); background: var(--surface); box-shadow: var(--shadow); animation: enter .8s .15s var(--ease) both; }
+.intro[hidden] + .how { display: none; }
+.how-pic { margin: 0; display: grid; gap: 8px; align-content: start; }
+.how-wipe { position: relative; aspect-ratio: 4 / 3; border-radius: var(--r-img); overflow: hidden; background: var(--raised); }
+.how-wipe img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.how-after { clip-path: inset(0 0 0 50%); animation: how-wipe 9s var(--ease) infinite alternate; }
+.how-line { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: #fff; box-shadow: 0 0 8px #0006; animation: how-line 9s var(--ease) infinite alternate; }
+@keyframes how-wipe { 0%, 15% { clip-path: inset(0 0 0 92%); } 85%, 100% { clip-path: inset(0 0 0 8%); } }
+@keyframes how-line { 0%, 15% { left: 92%; } 85%, 100% { left: 8%; } }
+.how-pic figcaption { font-size: 12px; line-height: 1.4; color: var(--faint); }
+.how-steps h2 { margin: 2px 0 12px; font-size: 14px; font-weight: 600; }
+.how-steps ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.how-steps li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; }
+.how-steps li > i { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 18px; }
+.how-steps li span { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.how-steps li b { display: block; color: var(--text); font-size: 15px; font-weight: 600; }
+@media (max-width: 1060px) { .how { display: none; } }
 .intro-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-top: 4px; border-top: 1px solid var(--line); }
 .intro-foot p { font-size: 14px; }
 .near-me { display: inline-flex; align-items: center; gap: 6px; border: 0; background: var(--raised); border-radius: 999px; padding: 9px 14px; font-weight: 600; font-size: 14px; }

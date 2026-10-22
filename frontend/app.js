@@ -1,3 +1,4 @@
+import { tick, chime } from '/sound.js';
 const $ = id => document.getElementById(id);
 // Model-written text never shows an em or en dash used as punctuation (house style); a comma reads the same.
 const tidy = v => typeof v === 'string' ? v.replace(/(\d)\s*–\s*(\d)/g, '$1-$2').replace(/\s*[—–]\s*/g, ', ') : v;
@@ -324,7 +325,7 @@ async function openStudio(space, photo = null, demo = null) {
   $('studio-place').textContent = `${activation ? 'Activation: ' : ''}${bizLabel()}, ${space.neighborhood || space.city}`;
   $('c-name').textContent = activation ? 'Reading the fans…' : 'Reading the neighborhood…'; $('c-tag').textContent = space.title; $('c-body').hidden = true;
   $('before').src = safeUrl(photo || space.photo); $('after-wrap').hidden = true; $('slider').hidden = true; $('l-after').hidden = true; $('shimmer').hidden = false; painting(activation ? 'Reading the fans…' : 'Reading the neighbourhood…');
-  $('live').className = 'live'; $('live-text').textContent = 'Starting the agent…'; $('steps').replaceChildren(); $('log').replaceChildren(); $('walk-status').hidden = true;
+  $('live').className = 'live'; $('live-text').textContent = 'Starting the agent…'; tick(); $('steps').replaceChildren(); $('log').replaceChildren(); $('walk-status').hidden = true;
   const pending = new Map();
   try {
     const aspect = await photoAspect($('before'));
@@ -383,6 +384,7 @@ function handle(ev, pending) {
     concept = ev.concept; if (ev.render && !render) showRender(ev.render, { sweep: true }); showConcept(ev.concept); renderCharts();
     if (ev.concept.heatmap) paintHeat(ev.concept.heatmap);
     $('live').className = 'live done'; $('live-text').textContent = render ? 'Done. Drag the image to compare.' : 'Done, but the room could not be painted this time. Run it again, or pick another photo.';
+    chime();
   } else if (ev.type === 'error') { fail(ev.message); logItem('err', ev.message); }
   else if (ev.type === 'done') { logItem('', `${ev.qlooCalls?.length || 0} Qloo API calls`); runId = ev.runId || null; if (concept && (demoSlug || (runId && config.llm))) offerBaseline(); }
 }

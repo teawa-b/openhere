@@ -21,7 +21,8 @@ const files = {
   '/style.css': ['style.css', 'text/css'], '/favicon.svg': ['favicon.svg', 'image/svg+xml'],
   '/walk': ['walk.html', 'text/html'], '/walk.js': ['walk.js', 'text/javascript'],
   '/live': ['live.html', 'text/html'], '/live.js': ['live.js', 'text/javascript'],
-  '/room3d': ['room3d.html', 'text/html'], '/room3d.js': ['room3d.js', 'text/javascript'], '/room.css': ['room.css', 'text/css']
+  '/room3d': ['room3d.html', 'text/html'], '/room3d.js': ['room3d.js', 'text/javascript'], '/room.css': ['room.css', 'text/css'],
+  '/sound.js': ['sound.js', 'text/javascript']
 };
 const cdn = 'https://cdn.jsdelivr.net';
 // The walkthrough's import map is inline, so it is allowed by hash rather than 'unsafe-inline'.
