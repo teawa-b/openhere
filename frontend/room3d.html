@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Walk inside, Openhere</title>
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="/img/openhere-32.png" type="image/png" sizes="32x32">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap">
+  <link rel="stylesheet" href="/room.css">
+  <script type="module" src="/room3d.js"></script>
+</head>
+<body class="walk3d">
+  <canvas id="view"></canvas>
+  <header class="w3-top">
+    <a class="wordmark" href="/"><img src="/img/openhere-180.png" alt="" width="26" height="26"><span>Openhere</span></a>
+    <p id="w3-name" class="w3-name"></p>
+    <button id="w3-vr" class="w3-btn" type="button" hidden>Enter VR</button>
+  </header>
+  <div id="w3-load" class="w3-load"><p>Loading the room in 3D</p><div class="w3-bar"><i id="w3-progress"></i></div></div>
+  <div class="w3-keys" aria-hidden="true">
+    <div class="w3-row"><span data-k="w">W</span></div>
+    <div class="w3-row"><span data-k="a">A</span><span data-k="s">S</span><span data-k="d">D</span></div>
+    <p>Walk with WASD. Drag or use the arrow keys to look.</p>
+  </div>
+  <p class="w3-note" id="w3-note"></p>
+</body>
+</html>

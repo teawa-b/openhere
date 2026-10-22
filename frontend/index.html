@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Openhere</title>
+  <meta name="description" content="Pick any spot. Qloo profiles who goes out there, an agent redesigns a real listing, and you walk inside.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/img/openhere-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/img/openhere-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.0/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="/openhere.css">
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.0/dist/maplibre-gl.js"></script>
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <div id="map" class="map" aria-label="Map. Click a place to start."></div>
+
+  <header class="bar">
+    <a class="logo" href="/"><img src="/img/openhere-180.png" alt="" width="26" height="26">open<b>here</b></a>
+    <form id="search" class="search" role="search">
+      <input id="q" placeholder="Search a city or street" autocomplete="off" maxlength="160" aria-label="Search a place">
+      <button type="button" id="locate" class="locate" aria-label="Use my location" title="Use my location"><i class="ph ph-crosshair"></i></button>
+      <button aria-label="Search"><i class="ph ph-arrow-right"></i></button>
+    </form>
+  </header>
+
+  <!-- Intro: what this is, and three finished examples that open instantly -->
+  <section id="hint" class="intro" aria-labelledby="intro-title">
+    <h1 id="intro-title">Design the place for the people around it.</h1>
+    <p>Pick any spot. Qloo profiles who goes out there, an agent redesigns a real listing, and you walk inside.</p>
+    <h2>See one in seconds</h2>
+    <div class="examples" id="examples">
+      <button type="button" class="example" data-demo="live-music-parkdale">
+        <img src="/img/demo-openhere-live-music-parkdale-1.jpg" alt="" width="152" height="114">
+        <span><b>A live-music room in an empty Dollarama</b><span>Parkdale, Toronto</span></span>
+      </button>
+      <button type="button" class="example" data-demo="redbull-bridgers">
+        <img src="/img/demo-openhere-redbull-bridgers-1.jpg" alt="" width="152" height="114">
+        <span><b>Red Bull's night for Phoebe Bridgers fans</b><span>A brand activation, Parkdale</span></span>
+      </button>
+      <button type="button" class="example" data-demo="cafe-chelsea">
+        <img src="/img/demo-openhere-cafe-chelsea-1.jpg" alt="" width="152" height="114">
+        <span><b>A café in an old diner car</b><span>Chelsea, New York</span></span>
+      </button>
+    </div>
+    <div class="intro-foot">
+      <p>Or click anywhere on the map.</p>
+      <button type="button" id="locate-hint" class="near-me"><i class="ph ph-navigation-arrow"></i>Use where I am</button>
+    </div>
+  </section>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- Step 1: what do you want to open here? -->
+  <div id="ask" class="ask" hidden>
+    <p id="ask-place" class="ask-place"></p>
+    <h2>What do you want to open?</h2>
+    <div class="types">
+      <button data-type="restaurant"><i class="ph ph-fork-knife"></i>Restaurant</button>
+      <button data-type="cafe"><i class="ph ph-coffee"></i>Café</button>
+      <button data-type="bar"><i class="ph ph-martini"></i>Bar</button>
+    </div>
+    <p class="types-label">Live events</p>
+    <div class="types events">
+      <button data-type="live music venue"><i class="ph ph-microphone-stage"></i>Live music</button>
+      <button data-type="comedy club"><i class="ph ph-mask-happy"></i>Comedy</button>
+      <button data-type="sports bar"><i class="ph ph-television-simple"></i>Sports bar</button>
+      <button data-type="founders' café with a podcast studio"><i class="ph ph-microphone"></i>Founders</button>
+    </div>
+    <form id="other" class="other"><input id="other-input" maxlength="60" placeholder="Something else, like ramen or a bakery" aria-label="Something else"><button aria-label="Go"><i class="ph ph-arrow-right"></i></button></form>
+    <p class="types-label">Brand activation <small>a pop-up for one event's fans</small></p>
+    <form id="activation" class="activation" autocomplete="off">
+      <input id="act-brand" maxlength="80" placeholder="Brand, e.g. Red Bull" aria-label="Brand" required>
+      <span class="act-x" aria-hidden="true">×</span>
+      <input id="act-event" maxlength="80" placeholder="Headliner or team" aria-label="Event, headliner or team" required>
+      <button aria-label="Design the activation"><i class="ph ph-arrow-right"></i></button>
+    </form>
+  </div>
+
+  <!-- Step 2: spaces nearby -->
+  <aside id="sheet" class="sheet" hidden>
+    <div class="sheet-head">
+      <div><p id="sheet-kicker" class="kicker"></p><h2 id="sheet-title">Spaces nearby</h2></div>
+      <button id="sheet-close" class="x" aria-label="Close"><i class="ph ph-x"></i></button>
+    </div>
+    <div id="cards" class="cards"></div>
+  </aside>
+
+  <!-- Step 3: the studio -->
+  <section id="studio" class="studio" hidden>
+    <button id="studio-close" class="x studio-x" aria-label="Back to map"><i class="ph ph-x"></i></button>
+    <div class="stage">
+      <div id="compare" class="compare">
+        <img id="before" alt="The space today">
+        <div id="after-wrap" class="after-wrap" hidden><img id="after" alt="The redesign"></div>
+        <input id="slider" class="slider" type="range" min="0" max="100" value="50" aria-label="Drag to compare" hidden>
+        <div id="handle" class="handle" hidden aria-hidden="true"><span><i class="ph ph-arrows-left-right"></i></span></div>
+        <span class="label l-before">Today</span><span id="l-after" class="label l-after" hidden>Redesign</span>
+        <div id="shimmer" class="shimmer"><div class="painting" role="status" aria-live="polite"><i class="ph ph-hourglass-medium"></i><span id="shimmer-text">Designing your space…</span></div></div>
+      </div>
+      <div id="live" class="live"><span class="dot"></span><span id="live-text">Starting</span><span id="steps" class="steps"></span></div>
+      <div id="timeline" class="timeline" hidden aria-label="See it at different times of day">
+        <button data-tod="as-designed" class="on">As designed</button>
+        <button data-tod="morning"><i class="ph ph-sun-horizon"></i>Morning</button>
+        <button data-tod="golden"><i class="ph ph-sun"></i>Golden hour</button>
+        <button data-tod="night"><i class="ph ph-moon"></i>Night</button>
+      </div>
+    </div>
+    <div class="side">
+      <p id="studio-place" class="kicker"></p>
+      <h1 id="c-name" class="c-name">Reading the neighborhood</h1>
+      <p id="c-tag" class="c-tag"></p>
+      <div id="c-body" class="c-body" hidden>
+        <p id="demo-note" class="demo-note" hidden>A recorded run of this example, so it opens instantly. Pick your own spot on the map to run one live.</p>
+        <div id="c-who" class="chips"></div>
+        <div class="walk-row"><button id="walk" class="cta">Walk inside <i class="ph ph-arrow-right"></i></button><button id="walk3d" class="cta ghost" hidden>In 3D or VR</button></div>
+        <p id="walk-status" class="walk-status" hidden></p>
+        <form id="refine" class="refine"><input id="refine-input" maxlength="400" placeholder="Change something" aria-label="Change something"><button aria-label="Apply"><i class="ph ph-arrow-right"></i></button></form>
+        <section class="choices-box"><h3 class="choices-title">Why it looks like this <small>each choice cites Qloo</small></h3><ul id="c-choices" class="choices"></ul></section>
+        <details id="charts" class="charts" hidden><summary class="charts-title">The neighborhood, by Qloo</summary><div id="chart-list" class="chart-list"></div></details>
+        <button id="why" class="link">How the agent decided</button>
+      </div>
+    </div>
+    <div id="drawer" class="drawer" hidden>
+      <div class="sheet-head"><h2>How the agent decided</h2><button id="drawer-close" class="x" aria-label="Close"><i class="ph ph-x"></i></button></div>
+      <p id="mode" class="mono"></p>
+      <ol id="log" class="log"></ol>
+    </div>
+  </section>
+
+  <input id="upload" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+  <footer class="credit">Taste data from <a href="https://www.qloo.com" target="_blank" rel="noreferrer">Qloo</a>. Map © OpenStreetMap, OpenFreeMap.</footer>
+</body>
+</html>

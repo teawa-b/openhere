@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Walk inside</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=DM+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/live.js"></script>
+</head>
+<body class="live-page">
+  <video id="video" class="live-video" autoplay muted playsinline></video>
+  <img id="poster" class="live-poster" alt="">
+
+  <a class="logo live-logo" id="live-logo" href="/"></a>
+  <div class="live-top">
+    <p id="live-name" class="live-name"></p>
+    <span id="clock" class="live-clock" hidden></span>
+  </div>
+
+  <div id="gate" class="live-gate">
+    <h1>Step inside.</h1>
+    <p>A world model turns the redesign into a space you can walk through, live. Sessions last a few minutes.</p>
+    <button id="enter" class="cta">Enter the space</button>
+    <p id="gate-status" class="mono"></p>
+  </div>
+
+  <div id="times" class="times" hidden>
+    <button data-time="morning">Morning</button>
+    <button data-time="afternoon">Afternoon</button>
+    <button data-time="golden">Golden hour</button>
+    <button data-time="evening">Evening</button>
+    <button data-time="late">Late night</button>
+  </div>
+
+  <div class="pad live-pad" aria-label="Walk">
+    <span></span><button data-cmd="forward" aria-label="Forward">↑</button><span></span>
+    <button data-cmd="left" aria-label="Left">←</button><button data-cmd="backward" aria-label="Back">↓</button><button data-cmd="right" aria-label="Right">→</button>
+  </div>
+  <p id="hint" class="live-hint" hidden>WASD to walk · arrows or drag to look</p>
+</body>
+</html>

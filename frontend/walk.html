@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Walkthrough — Openhere</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&family=DM+Mono:wght@500&display=swap">
+  <style>
+    html, body { margin: 0; height: 100%; background: #0b0712; color: #f3efe6; font: 14px/1.5 'Bricolage Grotesque', system-ui, sans-serif; overflow: hidden; }
+    canvas { display: block; touch-action: none; }
+    .panel { position: fixed; top: 16px; left: 16px; max-width: min(360px, calc(100vw - 32px)); background: #0b0712d9; backdrop-filter: blur(8px); border: 1px solid #ffffff1f; border-radius: 14px; padding: 16px 18px; z-index: 5; }
+    .panel h1 { font: 800 26px/1.05 'Bricolage Grotesque', sans-serif; letter-spacing: -.03em; margin: 0 0 4px; }
+    .panel p { margin: 0; color: #c9c2b1; }
+    .mono { font: 500 11px 'DM Mono', monospace; letter-spacing: .06em; color: #71f0bd; }
+    .panel a { color: #f3efe6; }
+    form { display: flex; margin-top: 12px; border: 1px solid #ffffff2e; border-radius: 9px; overflow: hidden; }
+    form input { flex: 1; min-width: 0; background: transparent; border: 0; color: inherit; padding: 9px 10px; font: inherit; outline: none; }
+    form button { border: 0; background: #0052ff; color: #fff; font: 600 13px 'Bricolage Grotesque'; padding: 0 12px; cursor: pointer; }
+    form button:disabled { opacity: .5; }
+    .help { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); font: 500 11px 'DM Mono', monospace; background: #0009; padding: 8px 12px; border-radius: 8px; white-space: nowrap; z-index: 5; }
+    #loading { position: fixed; inset: 0; display: grid; place-items: center; z-index: 4; font: 600 22px 'Bricolage Grotesque', sans-serif; text-align: center; padding: 24px; }
+    .pad { position: fixed; bottom: 60px; right: 20px; display: none; grid-template-columns: repeat(3, 52px); gap: 6px; z-index: 5; }
+    .pad button { height: 52px; border-radius: 12px; border: 1px solid #ffffff33; background: #0008; color: #fff; font-size: 20px; }
+    @media (pointer: coarse) { .pad { display: grid; } }
+    #VRButton { z-index: 6 !important; }
+  </style>
+  <script type="importmap">{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+    "@sparkjsdev/spark": "https://cdn.jsdelivr.net/npm/@sparkjsdev/spark@2.0.0/dist/spark.module.js"
+  } }</script>
+  <script type="module" src="/walk.js"></script>
+</head>
+<body>
+  <div class="panel">
+    <p class="mono">OPENHERE · 3D WALKTHROUGH</p>
+    <h1 id="title">Loading the space…</h1>
+    <p id="tagline"></p>
+    <form id="change"><input id="change-input" maxlength="400" placeholder="Request a change, e.g. “brass pendant lights”"><button>Rebuild</button></form>
+    <p id="change-status" class="mono" style="margin-top:8px"></p>
+  </div>
+  <div id="loading">Downloading the Gaussian-splat world…</div>
+  <div class="pad" aria-label="Movement">
+    <span></span><button data-move="f" aria-label="Forward">↑</button><span></span>
+    <button data-turn="1" aria-label="Turn left">↺</button><button data-move="b" aria-label="Back">↓</button><button data-turn="-1" aria-label="Turn right">↻</button>
+  </div>
+  <div class="help" id="help">Drag to look · WASD / arrows to walk · Q/E up/down</div>
+</body>
+</html>
