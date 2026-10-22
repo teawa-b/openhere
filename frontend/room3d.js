@@ -75,7 +75,12 @@ try {
     if (full) sharpen(gltf, full);
   }
   else throw new Error('No 3D room here yet.');
-} catch (error) { status(error.message); throw error; }
+} catch (error) {
+  // Say what went wrong and offer another go; a busy model is usually free again a minute later.
+  status(error.message); document.querySelector('.w3-bar').style.display = 'none';
+  $('w3-retry').hidden = false; $('w3-retry').onclick = () => location.reload();
+  throw error;
+}
 let spread = 0.46;
 if (depth) {
   let map = null; spread = 0;

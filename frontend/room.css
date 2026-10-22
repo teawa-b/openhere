@@ -200,7 +200,10 @@ label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; }
 .w3-name { margin: 0; padding: 8px 14px; border-radius: 999px; background: rgba(29, 18, 24, .7); font-weight: 600; }
 .w3-btn { margin-left: auto; height: 40px; padding: 0 18px; border-radius: 999px; border: 0; background: #ef5c8c; color: #1d1218; font-weight: 600; }
 .w3-load { position: fixed; inset: 0; display: grid; place-content: center; gap: 14px; text-align: center; z-index: 3; background: #1d1218; }
-.w3-load p { margin: 0; font-size: 18px; }
+.w3-load p { margin: 0; font-size: 18px; max-width: 36ch; }
+.w3-retry { justify-self: center; border: 0; border-radius: 999px; padding: 11px 22px; font: inherit; font-weight: 600; background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+.w3-retry[hidden] { display: none; }
+.w3-retry:active { transform: scale(.98); }
 .w3-bar { width: 260px; height: 4px; border-radius: 2px; background: rgba(246, 236, 228, .15); overflow: hidden; }
 .w3-bar i { display: block; height: 100%; width: 0; background: #ef5c8c; transition: width .2s; }
 .w3-keys { position: fixed; left: 24px; bottom: 24px; z-index: 2; display: grid; gap: 6px; justify-items: start; }
