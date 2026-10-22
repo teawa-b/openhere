@@ -262,6 +262,14 @@ test('finalize_concept accepts design choices sent as a JSON string', async () =
   await tools.run('local_taste_tags', { facet: 'ambience' });
   const out = await tools.run('finalize_concept', { name: 'n', tagline: 't', audience: 'a', gap: 'g', offer: 'o', design_choices: JSON.stringify([{ element: 'Mood', choice: 'c', signals: ['Cozy'] }]) });
   assert.deepEqual(out.ui.design_choices[0].signals, [{ name: 'Cozy', grounded: true }]);
+  // Other shapes models send: a list wrapped in an object, a string encoded twice, and plain lines of text.
+  const shapes = [{ items: [{ element: 'Mood', choice: 'c', signals: ['Cozy'] }] }, JSON.stringify(JSON.stringify([{ element: 'Mood', choice: 'c' }])), '- **Mood**: warm and low\n- Seating: long counter'];
+  for (const design_choices of shapes) {
+    const t = createTools({ qloo: createQloo({ key: QKEY, fetcher: fakeUpstreams() }), listing: { id: 'x', lat: 1, lng: 2, title: 'T' }, business: 'cafe', imageModel: null, saveRender: async r => r });
+    await t.run('local_taste_tags', { facet: 'ambience' });
+    const res = await t.run('finalize_concept', { name: 'n', tagline: 't', audience: 'a', gap: 'g', offer: 'o', design_choices });
+    assert.equal(res.ui?.design_choices?.[0]?.element, 'Mood', `accepted ${JSON.stringify(design_choices).slice(0, 40)}`);
+  }
 });
 
 test('event venues get a booking brief, and slate acts are checked against Qloo results', async () => {

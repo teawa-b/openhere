@@ -494,7 +494,15 @@ export function createTools({ qloo, listing, business, imageModel, saveRender, l
       // Some models send nested arrays as JSON strings; accept both shapes.
       const parse = v => { if (typeof v !== 'string') return v; try { return JSON.parse(v); } catch { return v; } };
       const concept = { ...input, design_choices: parse(input.design_choices), risks: parse(input.risks), programming: parse(input.programming) };
-      // Smaller models sometimes send { element: choice } or plain strings; turn those into the expected list.
+      // Smaller models sometimes send { element: choice }, a list wrapped in an object, a string encoded twice, or
+      // plain lines of text; turn all of those into the expected list.
+      if (typeof concept.design_choices === 'string') concept.design_choices = parse(concept.design_choices);
+      if (typeof concept.design_choices === 'string') {
+        concept.design_choices = concept.design_choices.split('\n').map(l => l.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, '').trim()).filter(Boolean)
+          .map(l => { const m = l.match(/^\**([^:*]{2,40})\**:\s*(.+)$/); return m ? { element: m[1].trim(), choice: m[2].trim(), signals: [] } : l; });
+      }
+      const wrapped = concept.design_choices && typeof concept.design_choices === 'object' && !Array.isArray(concept.design_choices) && Object.values(concept.design_choices).find(Array.isArray);
+      if (wrapped) concept.design_choices = wrapped;
       if (concept.design_choices && typeof concept.design_choices === 'object' && !Array.isArray(concept.design_choices)) {
         concept.design_choices = Object.entries(concept.design_choices).map(([element, v]) => v && typeof v === 'object' ? { element, ...v } : { element, choice: String(v), signals: [] });
       }
